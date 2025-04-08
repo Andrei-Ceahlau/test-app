@@ -1,6 +1,6 @@
 # Aplicație Gestionare Date Auto-Persoane
 
-Această aplicație permite gestionarea relațiilor dintre persoane și automobilele deținute de acestea. Aplicația include atât o parte de frontend (Angular) cât și backend (Node.js cu Express).
+Această aplicație permite gestionarea relațiilor dintre persoane și automobilele deținute de acestea. Aplicația include atât o parte de frontend (Angular) cât și backend (Node.js cu Express și PostgreSQL).
 
 ## Caracteristici
 
@@ -15,68 +15,99 @@ Această aplicație permite gestionarea relațiilor dintre persoane și automobi
 
 - Node.js v14+
 - npm v6+
-- MySQL/MariaDB
+- PostgreSQL (versiunea 12 sau mai nouă)
 
-## Instalare rapidă
+# Instalare și pornire
 
-### 1. Clonați repository-ul
+## Configurare
 
-```bash
-git clone https://github.com/username/carpeople-management.git
-cd carpeople-management
-```
+### 1. Instalare PostgreSQL
 
-### 2. Configurați baza de date
+1. Descarcă PostgreSQL de la [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+2. Urmează pașii de instalare standard
+3. Creează:
+   - Un utilizator 'postgres' cu parola 'postgres' (sau folosește utilizatorul implicit)
+   - O bază de date 'auto_persoane'
 
-- Creați o bază de date MySQL
-- Importați structura din fișierul `database.sql` (dacă există) sau folosiți migrările automate (vezi pașii următori)
-
-### 3. Configurați serverul backend
+### 2. Clonare repository
 
 ```bash
-cd server
-npm install
+git clone https://github.com/username/auto-persoane-app.git
+cd auto-persoane-app
 ```
 
-Creați un fișier `.env` în directorul `server` cu următorul conținut:
+### 3. Configurare variabile de mediu
+
+```bash
+# În directorul rădăcină al proiectului
+cp server/.env.example server/.env
+# Editați server/.env dacă este necesar pentru a configura conexiunea la baza de date
+```
+
+Exemplu de fișier `.env`:
 
 ```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=parola_ta
-DB_NAME=numele_bazei_de_date
 PORT=3000
+NODE_ENV=development
+
+# Database settings
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=auto_persoane
 ```
 
-### 4. Configurați aplicația frontend
+## Pornire aplicație
+
+⚠️ **IMPORTANT**: Folosiți comenzi cu paths complete, NU comenzi cu "../" care pot cauza erori!
+
+### Metoda 1: Manual (recomandată pentru dezvoltare)
 
 ```bash
-cd ../client
-npm install
-```
-
-### 5. Porniți aplicația
-
-#### Backend (Server)
-
-```bash
+# Terminal 1 - Pornire server (din directorul rădăcină)
 cd server
+npm install
+node app.js
+
+# Terminal 2 - Pornire client (din directorul rădăcină)
+cd client
+npm install --legacy-peer-deps
 npm start
 ```
 
-Serverul va rula pe portul 3000 (sau portul specificat în `.env`).
-
-#### Frontend (Client)
+### Metoda 2: Automată (recomandată pentru utilizare rapidă)
 
 ```bash
-cd client
-npm start
+# Linux/macOS
+chmod +x START.sh
+./START.sh
+
+# Windows
+START.bat
 ```
 
-Aplicația frontend va rula pe portul 4200. Deschideți browserul la adresa http://localhost:4200
+## Acces aplicație
+
+- Frontend: http://localhost:4200
+- API: http://localhost:3000/api
+
+## Structura directorului
+
+- `/client` - Aplicația Angular (frontend)
+- `/server` - API-ul Node.js/Express (backend)
+  - `/models` - Modele Sequelize pentru baza de date
+  - `/routes` - Rutele API
+  - `/controllers` - Controllere pentru operațiile CRUD
 
 ## Troubleshooting
+
+### Erori de API
+
+Dacă primiți erori de tipul "Http failure response for http://localhost:8080/api/...", verificați:
+
+1. Că serverul rulează pe portul 3000
+2. Că fișierul `client/src/environments/environment.ts` are `apiUrl` configurat corect la 'http://localhost:3000/api'
 
 ### Probleme cu Node.js și OpenSSL
 
@@ -96,13 +127,14 @@ cd client
 npm start -- --port=4201
 ```
 
-## Structura directorului
+### Probleme de conectare la baza de date
 
-- `/client` - Aplicația Angular (frontend)
-- `/server` - API-ul Node.js/Express (backend)
-  - `/models` - Modele Sequelize pentru baza de date
-  - `/routes` - Rutele API
-  - `/controllers` - Controllere pentru operațiile CRUD
+Verificați că:
+
+1. PostgreSQL rulează
+2. Ați creat baza de date 'auto_persoane'
+3. Credențialele din fișierul `.env` sunt corecte
+4. Nu există firewall care să blocheze conexiunea
 
 ## Contribuții și suport
 
