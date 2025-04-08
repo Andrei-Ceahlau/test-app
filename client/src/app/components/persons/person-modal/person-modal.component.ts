@@ -239,8 +239,10 @@ export class PersonModalComponent implements OnInit, OnChanges {
     console.log('onSubmit called');
     this.submitted = true;
     
+    // Verifică validitatea formularului
     if (this.personForm.invalid) {
       console.log('Form is invalid, validation errors:', this.personForm.errors);
+      
       // Afișăm toate erorile pentru fiecare câmp
       Object.keys(this.personForm.controls).forEach(key => {
         const control = this.personForm.get(key);
@@ -248,9 +250,12 @@ export class PersonModalComponent implements OnInit, OnChanges {
           console.log(`Field ${key} errors:`, control.errors);
         }
       });
+      
+      alert('Formularul conține erori. Verificați câmpurile marcate.');
       return;
     }
 
+    // Obține valorile formularului
     const formValue = this.personForm.getRawValue();
     console.log('Form values:', formValue);
     
@@ -269,6 +274,7 @@ export class PersonModalComponent implements OnInit, OnChanges {
     }
     console.log('Selected cars as objects:', selectedCars);
     
+    // Creează obiectul persoană
     const person: Person = {
       id: this.person?.id,
       nume: formValue.nume,
@@ -279,8 +285,23 @@ export class PersonModalComponent implements OnInit, OnChanges {
     };
     console.log('Person object to emit:', person);
     
-    this.save.emit(person);
-    console.log('Save event emitted');
+    // Emite evenimentul de salvare direct folosind setTimeout pentru a evita orice probleme de context
+    setTimeout(() => {
+      try {
+        console.log('Emitting save event...');
+        this.save.emit(person);
+        console.log('Save event emitted!');
+        
+        // Închide modalul după un mic delay pentru a permite propagarea evenimentului
+        setTimeout(() => {
+          console.log('Closing modal...');
+          this.onClose();
+        }, 300);
+      } catch (error) {
+        console.error('Error emitting save event:', error);
+        alert('A apărut o eroare la salvare: ' + (error.message || 'Eroare necunoscută'));
+      }
+    }, 0);
   }
 
   onClose(): void {
@@ -294,7 +315,70 @@ export class PersonModalComponent implements OnInit, OnChanges {
 
   // Metodă pentru trimiterea formularului când se apasă butonul
   submitForm(): void {
-    console.log('submitForm() called');
-    this.onSubmit();
+    console.log('submitForm() method called');
+    
+    try {
+      // Validare manuală pentru câmpurile esențiale înainte de a trimite
+      if (!this.personForm.get('nume')?.value) {
+        alert('Numele este obligatoriu!');
+        return;
+      }
+      
+      if (!this.personForm.get('prenume')?.value) {
+        alert('Prenumele este obligatoriu!');
+        return;
+      }
+      
+      if (!this.personForm.get('cnp')?.value || this.personForm.get('cnp')?.value.length !== 13) {
+        alert('CNP-ul trebuie să conțină 13 cifre!');
+        return;
+      }
+      
+      // Verifică vârsta
+      if (!this.personForm.get('varsta')?.value) {
+        this.calculateAge(); // Încearcă să recalculeze vârsta
+      }
+      
+      // Forțează crearea și emiterea obiectului person chiar dacă formularul nu este 100% valid
+      const formValue = this.personForm.getRawValue();
+      
+      // Obține ID-urile mașinilor selectate
+      const selectedCarIds = formValue.cars ? formValue.cars : [];
+      
+      // Transformă ID-urile în obiecte Car
+      const selectedCars = [];
+      for (const idStr of selectedCarIds) {
+        const id = typeof idStr === 'string' ? parseInt(idStr, 10) : idStr;
+        const car = this.cars.find(c => c.id === id);
+        if (car) {
+          selectedCars.push({...car});
+        }
+      }
+      
+      // Creează obiectul person direct
+      const person: Person = {
+        id: this.person?.id,
+        nume: formValue.nume,
+        prenume: formValue.prenume,
+        cnp: formValue.cnp,
+        varsta: formValue.varsta || 0,
+        cars: selectedCars
+      };
+      
+      console.log('Direct emitting save event with person object:', person);
+      
+      // Emite evenimentul direct, fără setTimeout
+      this.save.emit(person);
+      
+      // Forțează o pauză înainte de a închide modalul
+      setTimeout(() => {
+        console.log('Forcing modal close after save');
+        this.close.emit();
+      }, 500);
+      
+    } catch (error) {
+      console.error('Critical error in submitForm():', error);
+      alert('Eroare critică la salvarea datelor: ' + (error.message || 'Eroare necunoscută'));
+    }
   }
 } 

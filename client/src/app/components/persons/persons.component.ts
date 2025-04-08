@@ -133,55 +133,78 @@ export class PersonsComponent implements OnInit {
   }
 
   savePerson(person: Person): void {
-    console.log('Saving person:', person);
+    console.log('savePerson called with:', person);
+    console.log('Current showModal state:', this.showModal);
     
-    // Verificăm dacă avem mașini valide
-    if (person.cars && Array.isArray(person.cars)) {
-      console.log('Cars before saving:', person.cars);
-      
-      // Asigură-te că fiecare mașină are ID
-      const processedCars = person.cars.map(car => {
-        if (!car.id && car.id !== 0) {
-          console.error('Car without ID found:', car);
-          return null;
-        }
-        return car;
-      }).filter(car => car !== null);
-      
-      person.cars = processedCars;
-      console.log('Cars after processing:', person.cars);
-    } else {
-      person.cars = [];
+    if (!person) {
+      console.error('Person object is undefined or null');
+      alert('Eroare: Obiectul persoană este invalid.');
+      return;
     }
     
-    if (person.id) {
-      console.log('Updating person with ID:', person.id);
-      this.personService.update(person.id, person)
-        .subscribe(
-          response => {
-            console.log('Update successful:', response);
-            this.loadPersons();
-            this.closeModal();
-          },
-          error => {
-            console.error('Error updating person:', error);
-            // Afișează eroarea pentru debugging
-            alert('Eroare la actualizarea persoanei: ' + (error.message || JSON.stringify(error)));
+    // Asigură-te că avem date valide
+    if (!person.nume || !person.prenume || !person.cnp) {
+      console.error('Person object is missing required fields:', person);
+      alert('Eroare: Lipsesc câmpuri obligatorii pentru persoană.');
+      return;
+    }
+    
+    try {
+      // Verificăm dacă avem mașini valide
+      if (person.cars && Array.isArray(person.cars)) {
+        console.log('Cars before saving:', person.cars);
+        
+        // Asigură-te că fiecare mașină are ID
+        const processedCars = person.cars.map(car => {
+          if (!car.id && car.id !== 0) {
+            console.error('Car without ID found:', car);
+            return null;
+          }
+          return car;
+        }).filter(car => car !== null);
+        
+        person.cars = processedCars;
+        console.log('Cars after processing:', person.cars);
+      } else {
+        person.cars = [];
+      }
+      
+      console.log('Final person object before saving:', person);
+      
+      if (person.id) {
+        console.log('Updating person with ID:', person.id);
+        this.personService.update(person.id, person)
+          .subscribe({
+            next: (response) => {
+              console.log('Update successful:', response);
+              this.loadPersons();
+              this.closeModal();
+              alert('Persoana a fost actualizată cu succes!');
+            },
+            error: (error) => {
+              console.error('Error updating person:', error);
+              alert('Eroare la actualizarea persoanei: ' + (error.message || JSON.stringify(error)));
+            }
           });
-    } else {
-      console.log('Creating new person');
-      this.personService.create(person)
-        .subscribe(
-          response => {
-            console.log('Create successful:', response);
-            this.loadPersons();
-            this.closeModal();
-          },
-          error => {
-            console.error('Error creating person:', error);
-            // Afișează eroarea pentru debugging
-            alert('Eroare la crearea persoanei: ' + (error.message || JSON.stringify(error)));
+      } else {
+        console.log('Creating new person');
+        this.personService.create(person)
+          .subscribe({
+            next: (response) => {
+              console.log('Create successful:', response);
+              this.loadPersons();
+              this.closeModal();
+              alert('Persoana a fost creată cu succes!');
+            },
+            error: (error) => {
+              console.error('Error creating person:', error);
+              alert('Eroare la crearea persoanei: ' + (error.message || JSON.stringify(error)));
+            }
           });
+      }
+    } catch (error) {
+      console.error('Error in savePerson:', error);
+      alert('Eroare neașteptată: ' + error.message);
     }
   }
 

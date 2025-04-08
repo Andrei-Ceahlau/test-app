@@ -1,28 +1,132 @@
-/* Fix pentru butonul de salvare din modal */
-.modal-footer {
-  position: sticky;
-  bottom: 0;
-  background-color: #f8f9fa;
-  z-index: 1;
-  padding: 1rem;
-  border-top: 1px solid rgba(0,0,0,0.1);
+/* Revenire la paleta de culori albastru și alb */
+body, html, p, h1, h2, h3, h4, h5, h6, .card, .modal, .table, .form-control, label, select, option, button {
+  color: #212529 !important;
+}
+
+body, html {
+  background-color: #ffffff !important;
+}
+
+/* Fix pentru titlul Gestionare Date */
+span[_ngcontent-xhd-c45], 
+.navbar-brand span,
+span[class*="_ngcontent"] {
+  color: #4361ee !important;
+  background-color: white !important;
+  padding: 3px 10px !important;
+  border-radius: 4px !important;
+  font-weight: bold !important;
+}
+
+/* Fix pentru butonul de salvare în modaluri */
+button[type="button"].btn-primary, 
+button.btn-primary {
+  pointer-events: auto !important;
+  user-select: auto !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  z-index: 100 !important;
+}
+
+button[type="button"].btn-primary:not([disabled]),
+button.btn-primary:not([disabled]) {
+  background-color: #4361ee !important;
+  border-color: #4361ee !important;
+  color: white !important;
+}
+
+button[type="button"].btn-primary:hover:not([disabled]),
+button.btn-primary:hover:not([disabled]) {
+  background-color: #2c5ce2 !important;
+  border-color: #2c5ce2 !important;
+}
+
+/* Fix pentru formulare în modaluri */
+form {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Asigură că overlay-ul modal nu blochează butonul de submit */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+.modal {
+  z-index: 1050 !important;
+}
+
+.modal-dialog {
+  z-index: 1060 !important;
 }
 
 .modal-content {
-  max-height: 85vh;
-  overflow-y: auto;
+  z-index: 1070 !important;
+}
+
+.modal-footer {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 1080 !important;
+  background-color: #f8f9fa !important;
+}
+
+.modal-content {
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  background-color: #ffffff !important;
+  color: #212529 !important;
 }
 
 .modal-body {
   padding: 1.5rem;
-  max-height: calc(85vh - 120px);
-  overflow-y: auto;
+  max-height: none !important;
+  overflow-y: visible !important;
+  color: #212529 !important;
+  background-color: #ffffff !important;
+}
+
+.modal-header {
+  background-color: #4361ee !important;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.modal-header .modal-title {
+  color: white !important;
+}
+
+.modal-header .close {
+  color: white !important;
+}
+
+.modal {
+  overflow-y: auto !important;
+}
+
+.modal-dialog {
+  margin: 1.75rem auto;
+  max-width: 700px;
+  width: 95% !important;
+}
+
+/* Fix pentru select multiplu în modal persoane */
+.custom-select {
+  height: auto !important;
+  min-height: 120px !important;
+  background-color: #ffffff !important;
+  color: #212529 !important;
+}
+
+option {
+  background-color: #ffffff !important;
+  color: #212529 !important;
 }
 
 /* Fixare culori pentru butoane */
 .btn-primary {
   background-color: #4361ee !important;
   border-color: #4361ee !important;
+  color: white !important;
 }
 
 .btn-outline-primary {
@@ -37,6 +141,7 @@
 
 /* Fixare stil pentru card-uri */
 .card {
+  background-color: #ffffff !important;
   border: none;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   border-radius: 8px;
@@ -44,13 +149,26 @@
 }
 
 .card-header {
+  background-color: #4361ee !important;
+  color: white !important;
   border-radius: 8px 8px 0 0 !important;
   border-bottom: none;
   padding: 1rem 1.5rem;
 }
 
+.card-header h5, .card-header .card-title {
+  color: white !important;
+}
+
+.card-body {
+  background-color: #ffffff !important;
+  color: #212529 !important;
+  padding: 1.5rem;
+}
+
 /* Fixare pentru modele card-uri pe mobil */
 .mobile-car-card, .mobile-person-card {
+  background-color: #ffffff !important;
   border: none;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   border-radius: 8px;
@@ -71,11 +189,12 @@
 
 .table {
   margin-bottom: 0;
+  background-color: #ffffff !important;
 }
 
 .table th {
   background-color: #4361ee;
-  color: white;
+  color: white !important;
   border: none;
   font-weight: 500;
   padding: 0.75rem 1rem;
@@ -85,11 +204,7 @@
   padding: 0.75rem 1rem;
   vertical-align: middle;
   border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-/* Fixare dimensiuni pentru modele */
-.modal-dialog {
-  max-width: 700px;
+  color: #212529 !important;
 }
 
 /* Fixare general pentru aplicație */
@@ -100,10 +215,15 @@ body, html {
 
 /* Fix pentru navbar */
 .navbar {
+  background-color: #4361ee !important;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+.navbar-brand, .nav-link {
+  color: white !important;
 }
 
 /* Badge-uri pentru taxe */
@@ -117,15 +237,79 @@ body, html {
 
 .tax-low {
   background-color: rgba(76, 201, 176, 0.15);
-  color: #4cc9b0;
+  color: #4cc9b0 !important;
 }
 
 .tax-medium {
   background-color: rgba(255, 159, 28, 0.15);
-  color: #ff9f1c;
+  color: #ff9f1c !important;
 }
 
 .tax-high {
   background-color: rgba(230, 57, 70, 0.15);
-  color: #e63946;
+  color: #e63946 !important;
+}
+
+/* Fix pentru modalele Angular */
+app-car-modal, app-person-modal {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Fix pentru selecția de mașini în modalul de persoană */
+select[multiple] {
+  overflow-y: auto !important;
+  height: auto !important;
+  background-color: #ffffff !important;
+  color: #212529 !important;
+}
+
+/* Fix pentru butonul de adăugare/modificare */
+.modal-footer .btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+/* Mărește zona de conținut a modalului */
+.modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 3.5rem);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Fix pentru culori text în forms */
+.form-control {
+  color: #212529 !important;
+  background-color: #ffffff !important;
+}
+
+.form-group label {
+  color: #212529 !important;
+}
+
+/* Fix pentru placeholder */
+::placeholder {
+  color: #6c757d !important;
+  opacity: 0.7 !important;
+}
+
+/* Asigură culoarea corectă pentru textul secundar */
+.text-muted {
+  color: #6c757d !important;
 } 

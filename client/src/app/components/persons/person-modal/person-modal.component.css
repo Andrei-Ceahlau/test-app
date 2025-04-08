@@ -635,4 +635,82 @@ button:focus, input:focus, .ng-select.car-select .ng-select-container:focus {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
+}
+
+/* Stiluri pentru modal în schema albastru-alb */
+.modal-content {
+  color: #212529 !important;
+  background-color: #ffffff !important;
+}
+
+.modal-title {
+  color: white !important;
+}
+
+.modal-header {
+  background-color: #4361ee !important;
+}
+
+.form-group label {
+  color: #212529 !important;
+}
+
+.form-text, .text-muted {
+  color: #6c757d !important;
+  opacity: 0.8;
+}
+
+.form-control {
+  color: #212529 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #ced4da !important;
+}
+
+select.form-control option {
+  color: #212529 !important;
+  background-color: #ffffff !important;
+}
+
+/* Fix specific pentru butonul de salvare */
+button[type="button"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+#saveButton {
+  /* Asigură-te că butonul este mereu vizibil și se poate face click pe el */
+  position: relative !important;
+  z-index: 9999 !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  user-select: auto !important;
+  background-color: #4361ee !important;
+  border-color: #4361ee !important;
+  color: white !important;
+}
+
+#saveButton:hover:not(:disabled) {
+  background-color: #3050d0 !important;
+  border-color: #3050d0 !important;
+}
+
+#saveButton:active:not(:disabled) {
+  background-color: #2745c2 !important;
+}
+
+#saveButton:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+}
+
+.modal-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  background-color: #f8f9fa !important;
+  padding: 1rem !important;
+  border-top: 1px solid #dee2e6 !important;
+  z-index: 1080 !important;
 } 
