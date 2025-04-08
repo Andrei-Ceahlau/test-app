@@ -1,0 +1,1179 @@
+/* Bootstrap import */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+/* ng-select import */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/* Import Google Fonts - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Variabile pentru tema luminoasă și întunecată */
+:root {
+  /* Light Mode Variables */
+  --primary-color: #4361ee;
+  --primary-light: #4895ef;
+  --secondary-color: #3f37c9;
+  --accent-color: #f72585;
+  --success-color: #4cc9b0;
+  --warning-color: #ff9f1c;
+  --danger-color: #e63946;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --white-color: #ffffff;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
+  --border-color: #dee2e6;
+  --transition: all 0.3s ease;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+  --text-color: #3c4043;
+  --table-header-bg: #6200ee;
+  --table-header-text: #ffffff;
+  --table-hover-bg: rgba(98, 0, 238, 0.05);
+  --table-stripe-bg: rgba(0, 0, 0, 0.02);
+  --input-bg: #ffffff;
+  --input-text: #3c4043;
+  --transition-time: 0.3s;
+  --navbar-bg: #6200ee;
+  --navbar-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  /* Dark Mode Variables */
+  --primary-color: #bb86fc;
+  --primary-light: #c2a0ff;
+  --secondary-color: #03dac6;
+  --accent-color: #cf6679;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+  --light-color: #121212;
+  --dark-color: #e0e0e0;
+  --gray-color: #6c757d;
+  --light-gray: #333333;
+  --white-color: #212529;
+  --shadow-sm: 0 2px 4px rgba(255,255,255,0.05);
+  --shadow-md: 0 4px 6px rgba(255,255,255,0.1);
+  --shadow-lg: 0 10px 15px rgba(255,255,255,0.1);
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
+  --border-color: #333333;
+  --transition: all 0.3s ease;
+  --background-color: #121212;
+  --card-background: #1e1e1e;
+  --text-color: #e0e0e0;
+  --table-header-bg: #272727;
+  --table-header-text: #e0e0e0;
+  --table-hover-bg: rgba(187, 134, 252, 0.1);
+  --table-stripe-bg: rgba(255, 255, 255, 0.03);
+  --input-bg: #2d2d2d;
+  --input-text: #e0e0e0;
+  --navbar-bg: #272727;
+  --navbar-text: #e0e0e0;
+}
+
+/* Fix pentru Bootstrap bg-primary */
+.bg-primary {
+  background-color: var(--navbar-bg) !important;
+}
+
+/* Mode toggle switch */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 26px;
+  position: relative;
+  width: 50px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  background-color: white;
+  bottom: 4px;
+  content: "";
+  height: 18px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 18px;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--secondary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider-icons {
+  color: white;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  z-index: 2;
+}
+
+.slider-icons.sun {
+  left: 13px;
+  display: inline;
+}
+
+.slider-icons.moon {
+  left: 37px;
+  display: none;
+}
+
+input:checked ~ .slider-icons.sun {
+  display: none;
+}
+
+input:checked ~ .slider-icons.moon {
+  display: inline;
+}
+
+/* Global styles */
+* {
+  transition: background-color var(--transition-time), color var(--transition-time), border-color var(--transition-time), box-shadow var(--transition-time);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  padding-top: 20px;
+}
+
+/* Fix pentru tema aplicată la nivel de document */
+html[data-theme="dark"] {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+.container {
+  padding: 24px;
+  max-width: 1320px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Responsive container padding */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: var(--white-color);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 0;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--primary-color) !important;
+  letter-spacing: -0.5px;
+}
+
+.navbar-dark .navbar-brand {
+  color: var(--white-color) !important;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  color: var(--gray-color) !important;
+  transition: var(--transition);
+}
+
+.navbar-nav .nav-link:hover, 
+.navbar-nav .nav-link.active {
+  color: var(--primary-color) !important;
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+.navbar-toggler {
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+/* Stiluri pentru tabele */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background-color: var(--white-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.table th {
+  background-color: #f8f9fa;
+  color: var(--dark-color);
+  font-weight: 600;
+  padding: 14px;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px;
+  vertical-align: middle;
+  border-top: none;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr {
+  transition: var(--transition);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(67, 97, 238, 0.03);
+}
+
+.table .btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.table .btn-icon i {
+  font-size: 14px;
+  margin-right: 0;
+}
+
+.table-responsive {
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fixăm tema pentru diferite elemente Bootstrap */
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .dropdown-menu {
+  background-color: var(--card-background);
+}
+
+[data-theme="dark"] .text-dark {
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .border {
+  border-color: var(--border-color) !important;
+}
+
+/* Stiluri pentru butoane */
+.btn {
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.3px;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+  background-color: var(--secondary-color) !important;
+  color: var(--white-color) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn-secondary {
+  background-color: var(--light-gray);
+  color: var(--dark-color);
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+  background-color: #d3d4d5 !important;
+  color: var(--dark-color) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: var(--white-color);
+}
+
+.btn-danger:hover, .btn-danger:focus, .btn-danger:active {
+  background-color: #d32f2f !important;
+  color: var(--white-color) !important;
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: var(--white-color);
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active {
+  background-color: #3aaf9f !important;
+  color: var(--white-color) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  color: var(--white-color);
+  background-color: var(--primary-color);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.btn i {
+  margin-right: 6px;
+}
+
+/* Floating action button for mobile */
+.floating-action-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  font-size: 24px;
+}
+
+/* Hide floating button on desktop */
+@media (min-width: 769px) {
+  .floating-action-btn {
+    display: none;
+  }
+}
+
+/* Stiluri pentru formulare */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-control {
+  height: 48px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  background-color: var(--white-color);
+  color: var(--dark-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+  color: var(--dark-color);
+}
+
+.invalid-feedback {
+  font-size: 0.85rem;
+  margin-top: 5px;
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+/* Stiluri pentru carduri */
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--white-color);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  background-color: var(--white-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-footer {
+  background-color: var(--white-color);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+}
+
+/* Util classes */
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.py-3 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal styling */
+.modal-backdrop {
+  opacity: 0.7;
+}
+
+.modal-dialog {
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-radius: 0;
+  border-bottom: none;
+  padding: 1.3rem 1.5rem;
+}
+
+.modal-title {
+  color: var(--white-color);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.modal-header .close {
+  padding: 0.8rem;
+  margin: -0.8rem -0.8rem -0.8rem auto;
+  color: var(--white-color);
+  opacity: 0.8;
+  text-shadow: none;
+  transition: var(--transition);
+}
+
+.modal-header .close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #f8f9fa;
+}
+
+/* Custom form validation styling */
+.is-invalid {
+  border-color: var(--danger-color) !important;
+}
+
+/* Stiluri componente */
+.search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  padding-right: 40px;
+  border-radius: 30px;
+  height: 45px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+}
+
+.badge-year {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 30px;
+}
+
+.capacity-badge {
+  padding: 0.35rem 0.8rem;
+  border-radius: 30px;
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+}
+
+.tax-low {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.tax-medium {
+  background-color: var(--warning-color);
+  color: white;
+}
+
+.tax-high {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.action-buttons .btn {
+  margin-right: 5px;
+}
+
+.car-item, .person-item {
+  transition: transform 0.2s ease;
+  margin-bottom: 15px;
+}
+
+.car-item:hover, .person-item:hover {
+  transform: translateY(-3px);
+}
+
+.car-brand, .person-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+}
+
+.car-details, .person-details {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* Customize ng-select for theme */
+.ng-select .ng-select-container {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border-color: var(--border-color);
+}
+
+.ng-select.ng-select-focused .ng-select-container {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(98, 0, 238, 0.25);
+}
+
+.ng-dropdown-panel {
+  background-color: var(--card-background);
+  border-color: var(--border-color);
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  color: var(--text-color);
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: var(--table-hover-bg);
+  color: var(--text-color);
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 20px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Custom scrollbar for WebKit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Skeletons for loading states */
+.skeleton {
+  animation: skeleton-loading 1.5s ease infinite;
+  border-radius: 4px;
+  height: 15px;
+  margin-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Responsive height adjustments */
+@media (max-height: 700px) {
+  .container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Card-based display for small screens */
+  .mobile-card-view tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    background-color: var(--card-background);
+    box-shadow: var(--card-shadow);
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .mobile-card-view tbody td {
+    display: block;
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .mobile-card-view tbody td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    text-align: left;
+    font-weight: 500;
+  }
+  
+  .mobile-card-view thead {
+    display: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .table th, .table td {
+    padding: 12px 10px;
+  }
+  
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+  }
+  
+  .form-control {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  .container {
+    padding: 12px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .table th, .table td {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+  
+  .modal-body {
+    padding: 1rem;
+  }
+}
+
+/* Mobile card view for tables */
+@media (max-width: 767.98px) {
+  .mobile-card-view thead {
+    display: none;
+  }
+  
+  .mobile-card-view tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    background-color: var(--white-color);
+  }
+  
+  .mobile-card-view tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .mobile-card-view tbody td:last-child {
+    border-bottom: none;
+  }
+  
+  .mobile-card-view tbody td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    float: left;
+    text-align: left;
+  }
+  
+  .mobile-card-view .action-btns {
+    justify-content: flex-end;
+    display: flex;
+  }
+}
+
+/* Utilities */
+.text-primary { color: var(--primary-color) !important; }
+.text-success { color: var(--success-color) !important; }
+.text-warning { color: var(--warning-color) !important; }
+.text-danger { color: var(--danger-color) !important; }
+.text-muted { color: var(--gray-color) !important; }
+
+.bg-light { background-color: var(--light-color) !important; }
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow-md { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+
+.rounded { border-radius: var(--border-radius) !important; }
+.rounded-lg { border-radius: var(--border-radius-lg) !important; }
+.rounded-circle { border-radius: 50% !important; }
+
+/* Loader Animation */
+.loading-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(67, 97, 238, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Stiluri pentru aplicație */
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.nav-link.active {
+  border-bottom: 2px solid #007bff;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Stiluri pentru ng-select */
+.ng-select .ng-dropdown-panel {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.car-option {
+  padding: 5px 8px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.car-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.car-brand {
+  font-weight: bold;
+}
+
+.car-model {
+  color: #555;
+}
+
+.badge-year {
+  font-size: 11px;
+  padding: 3px 6px;
+}
+
+.engine-size {
+  font-size: 12px;
+  color: #666;
+}
+
+.tax-badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tax-low {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.15);
+}
+
+.tax-medium {
+  color: #fd7e14;
+  background-color: rgba(253, 126, 20, 0.15);
+}
+
+.tax-high {
+  color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.15);
+}
+
+.car-badge {
+  display: flex;
+  align-items: center;
+}
+
+.cars-selected {
+  display: flex;
+  align-items: center;
+}
+
+.selected-count {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Stiluri pentru card-uri */
+.card {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Stiluri pentru butoane */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+/* Stiluri pentru modals */
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-footer {
+  border-top: 1px solid #e9ecef;
+}
+
+/* Stiluri de bază pentru întreaga aplicație */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: #f5f7fa;
+}
+
+/* Optimizări pentru dispozitive mobile */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Dezactivăm zoom-ul la dublu-tap pe elemente interactive */
+  button, 
+  a, 
+  input[type="button"], 
+  input[type="submit"], 
+  input[type="reset"] {
+    touch-action: manipulation;
+  }
+  
+  /* Asigură redarea rapidă a paginii */
+  * {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Preveni overflow-ul ascuns pe dispozitive mobile */
+  div, section, article, main {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Ajustează înălțimea viewport-ului pentru dispozitive mobile */
+  @supports (-webkit-touch-callout: none) {
+    .min-vh-100 {
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
+/* Ajustări pentru tastatură mobilă */
+@media (max-width: 767px) {
+  .modal-open {
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* Asigură citibilitatea elementelor mici pe dispozitive mobile */
+@media (max-width: 767px) {
+  .small, small {
+    font-size: 85%;
+  }
+  
+  .font-weight-bold {
+    font-weight: 600 !important;
+  }
+}
+
+/* Animații optimizate pentru dispozitive mobile */
+@media (max-width: 767px) {
+  .fade-in {
+    animation-duration: 0.2s;
+  }
+
+  /* Elimină animații pe dispozitive cu baterie scăzută sau preferențe reduse de mișcare */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in, .card, .btn, .badge, .table-hover tr {
+      transition: none !important;
+      animation: none !important;
+      transform: none !important;
+    }
+  }
+}
+
+/* Optimizări pentru dispozitive cu latimi foarte mici */
+@media (max-width: 320px) {
+  .container-fluid {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  
+  .col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
+  .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}

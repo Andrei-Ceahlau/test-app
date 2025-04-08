@@ -1,0 +1,18 @@
+{
+  "/styles.css": {
+    "target": "http://localhost:4200",
+    "secure": false,
+    "changeOrigin": true,
+    "headers": {
+      "Content-Type": "text/css"
+    }
+  },
+  "/*.js": {
+    "target": "http://localhost:4200",
+    "secure": false,
+    "changeOrigin": true,
+    "headers": {
+      "Content-Type": "application/javascript"
+    }
+  }
+} 

@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicație pentru gestionarea persoanelor și mașinilor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+        .nav-link.active {
+            border-bottom: 2px solid #007bff;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        /* Stiluri pentru selectorul de mașini */
+        .custom-select-container {
+            position: relative;
+        }
+        
+        .custom-select {
+            background-color: #fff;
+            border-radius: 4px;
+            border-color: #ced4da;
+            min-height: 100px;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .custom-select option {
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+        }
+        
+        .selected-cars-info {
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        
+        .selected-count-container {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .selected-count {
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .car-card {
+            background-color: white;
+            border-color: #e9ecef !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .car-card:hover {
+            background-color: #f8f9fa;
+            border-color: #dee2e6 !important;
+        }
+        
+        .car-title {
+            font-size: 14px;
+        }
+        
+        .badge-sm {
+            font-size: 11px;
+            padding: 3px 6px;
+        }
+        
+        .car-details {
+            font-size: 12px;
+        }
+        
+        .tax-low {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .tax-medium {
+            color: #fd7e14;
+            background-color: rgba(253, 126, 20, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .tax-high {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Stiluri pentru butoane și iconițe */
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .modal-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Test App</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="persoane-nav">Persoane</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="masini-nav">Mașini</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <!-- Persoane Section -->
+        <div id="persoane-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Persoane</h2>
+                <button class="btn btn-primary" id="adauga-persoana-btn">Adaugă Persoană</button>
+            </div>
+            
+            <div class="table-container">
+                <input type="text" class="form-control mb-3" placeholder="Filtrează..." id="filtru-persoane">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nume/Prenume</th>
+                            <th>CNP</th>
+                            <th>Vârstă</th>
+                            <th>Mașini</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="persoane-table-body">
+                        <tr>
+                            <td>1</td>
+                            <td>Popescu Ion</td>
+                            <td>1800101123456</td>
+                            <td>43</td>
+                            <td>
+                                <ul>
+                                    <li>Dacia Logan (2020) - 1200cm³ - 50 lei</li>
+                                    <li>Volkswagen Golf (2019) - 1600cm³ - 100 lei</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <i class="fa fa-edit clickable text-primary mr-2"></i>
+                                <i class="fa fa-trash clickable text-danger"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Ionescu Maria</td>
+                            <td>2900202123456</td>
+                            <td>33</td>
+                            <td>
+                                <ul>
+                                    <li>BMW X5 (2021) - 3000cm³ - 200 lei</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <i class="fa fa-edit clickable text-primary mr-2"></i>
+                                <i class="fa fa-trash clickable text-danger"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Masini Section -->
+        <div id="masini-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Mașini</h2>
+                <button class="btn btn-primary" id="adauga-masina-btn">Adaugă Mașină</button>
+            </div>
+            
+            <div class="table-container">
+                <input type="text" class="form-control mb-3" placeholder="Filtrează..." id="filtru-masini">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Marcă</th>
+                            <th>Model</th>
+                            <th>An fabricație</th>
+                            <th>Capacitate cilindrică</th>
+                            <th>Taxă impozit</th>
+                            <th>Acțiuni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="masini-table-body">
+                        <tr>
+                            <td>1</td>
+                            <td>Dacia</td>
+                            <td>Logan</td>
+                            <td>2020</td>
+                            <td>1200</td>
+                            <td>50</td>
+                            <td>
+                                <i class="fa fa-edit clickable text-primary mr-2"></i>
+                                <i class="fa fa-trash clickable text-danger"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Volkswagen</td>
+                            <td>Golf</td>
+                            <td>2019</td>
+                            <td>1600</td>
+                            <td>100</td>
+                            <td>
+                                <i class="fa fa-edit clickable text-primary mr-2"></i>
+                                <i class="fa fa-trash clickable text-danger"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>BMW</td>
+                            <td>X5</td>
+                            <td>2021</td>
+                            <td>3000</td>
+                            <td>200</td>
+                            <td>
+                                <i class="fa fa-edit clickable text-primary mr-2"></i>
+                                <i class="fa fa-trash clickable text-danger"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Persoana -->
+    <div class="modal fade" id="persoana-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fa fa-user mr-2"></i>
+                        <span id="persoana-modal-title">Adaugă Persoană Nouă</span>
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="persoana-form">
+                        <!-- Carduri de informații din CNP -->
+                        <div class="row mb-3 d-none" id="cnp-info-card">
+                            <div class="col-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <i class="fa fa-info-circle mr-1"></i> Informații extrase din CNP
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-calendar mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Data nașterii</small>
+                                                        <strong id="cnp-birth-date">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-venus-mars mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Gen</small>
+                                                        <strong id="cnp-gender">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-map-marker mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Județ</small>
+                                                        <strong id="cnp-county">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Adaugă card cu sumarul datelor persoanei -->
+                        <div class="row mb-3 d-none" id="person-summary-card">
+                            <div class="col-12">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <i class="fa fa-info-circle mr-1"></i> Sumar date persoana
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-user mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Nume</small>
+                                                        <strong id="summary-nume">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-birthday-cake mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Vârstă</small>
+                                                        <strong id="summary-age">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fa fa-car mr-2 text-primary"></i>
+                                                    <div>
+                                                        <small class="text-muted d-block">Mașini</small>
+                                                        <strong id="summary-car-count">-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="progress mt-2">
+                                            <div id="completion-progress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <small id="completion-text" class="text-muted">0% completat</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datele personale -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nume">
+                                        <i class="fa fa-user-circle mr-1"></i>
+                                        Nume <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="nume" maxlength="255" required placeholder="Introduceți numele">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prenume">
+                                        <i class="fa fa-user mr-1"></i>
+                                        Prenume <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="prenume" maxlength="255" required placeholder="Introduceți prenumele">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cnp">
+                                        <i class="fa fa-id-card mr-1"></i>
+                                        CNP <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="cnp" maxlength="13" required placeholder="Introduceți CNP-ul">
+                                    <small class="form-text text-muted">
+                                        <i class="fa fa-info-circle mr-1"></i>
+                                        Codul Numeric Personal (13 cifre) - Va completa automat vârsta și alte informații
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="varsta">
+                                        <i class="fa fa-birthday-cake mr-1"></i>
+                                        Vârstă <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="varsta" maxlength="3" readonly>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">ani</span>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        <i class="fa fa-calculator mr-1"></i>
+                                        Se calculează automat din CNP
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="masini">
+                                <i class="fa fa-car mr-1"></i> Mașini asociate
+                            </label>
+                            <div class="custom-select-container">
+                                <select multiple class="form-control custom-select" id="masini">
+                                    <option value="1" data-brand="Dacia" data-model="Logan" data-year="2020" data-capacity="1500" data-tax="50">Dacia Logan (2020)</option>
+                                    <option value="2" data-brand="Volkswagen" data-model="Golf" data-year="2019" data-capacity="1800" data-tax="100">Volkswagen Golf (2019)</option>
+                                    <option value="3" data-brand="BMW" data-model="X5" data-year="2021" data-capacity="2500" data-tax="200">BMW X5 (2021)</option>
+                                    <option value="4" data-brand="Audi" data-model="A4" data-year="2018" data-capacity="2000" data-tax="100">Audi A4 (2018)</option>
+                                    <option value="5" data-brand="Mercedes" data-model="C-Class" data-year="2022" data-capacity="2200" data-tax="200">Mercedes C-Class (2022)</option>
+                                </select>
+                                <div class="selected-cars-info mt-2" id="selected-cars-info"></div>
+                            </div>
+                            <small class="form-text text-muted mt-1">
+                              <i class="fa fa-info-circle mr-1"></i> 
+                              Alegeți mașinile deținute de această persoană
+                            </small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <i class="fa fa-times mr-1"></i> Renunță
+                    </button>
+                    <button type="button" class="btn btn-primary" id="save-persoana">
+                        <i class="fa fa-save mr-1"></i> Salvează
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Masina -->
+    <div class="modal fade" id="masina-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fa fa-car mr-2"></i>
+                        <span id="masina-modal-title">Adaugă Mașină Nouă</span>
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="masina-form">
+                        <!-- Card informativ despre taxă -->
+                        <div class="card mb-3" id="tax-info-card">
+                            <div class="card-header bg-light py-2">
+                                <i class="fa fa-info-circle mr-1"></i> Informații despre taxă
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-money mr-2 text-primary"></i>
+                                            <div>
+                                                <small class="text-muted d-block">Taxă impozit</small>
+                                                <span id="tax-amount-badge" class="badge badge-success">50 lei</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-info-circle mr-2 text-primary"></i>
+                                            <div>
+                                                <small class="text-muted d-block">Categorie impozitare</small>
+                                                <strong id="tax-category" class="text-success">Redusă</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-2">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-calendar-check-o mr-2 text-primary"></i>
+                                            <div>
+                                                <small class="text-muted d-block">Data scadentă</small>
+                                                <span id="tax-due-date" class="font-weight-bold">31.03.2024</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-percent mr-2 text-primary"></i>
+                                            <div>
+                                                <small class="text-muted d-block">Reducere plată anticipată</small>
+                                                <span id="tax-discount" class="text-success">10%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 border-top">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-exclamation-triangle mr-2 text-warning"></i>
+                                        <small id="tax-info-message" class="text-muted">
+                                            Taxa trebuie plătită anual până la data de 31 martie.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="marca">
+                                        <i class="fa fa-tag mr-1"></i>
+                                        Denumire marcă <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="marca" maxlength="255" required placeholder="Introduceți marca">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="model">
+                                        <i class="fa fa-car mr-1"></i>
+                                        Denumire model <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="model" maxlength="255" required placeholder="Introduceți modelul">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="an_fabricatie">
+                                        <i class="fa fa-calendar mr-1"></i>
+                                        Anul fabricației <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="an_fabricatie" maxlength="4" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="capacitate">
+                                        <i class="fa fa-tachometer mr-1"></i>
+                                        Capacitatea cilindrică <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="capacitate" maxlength="4" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">cc</span>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        <i class="fa fa-info-circle mr-1"></i>
+                                        Capacitatea cilindrică determină taxa de impozit
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taxa">
+                                <i class="fa fa-money mr-1"></i>
+                                Taxa de impozit
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="taxa" maxlength="4" readonly>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">lei</span>
+                                </div>
+                            </div>
+                            <small class="form-text text-muted">
+                                <i class="fa fa-calculator mr-1"></i>
+                                Taxa se calculează automat în funcție de capacitatea cilindrică:
+                                <ul class="mt-1 mb-0">
+                                    <li>&lt; 1500 cc: <strong class="text-success">50 lei</strong></li>
+                                    <li>1500-2000 cc: <strong class="text-warning">100 lei</strong></li>
+                                    <li>&gt; 2000 cc: <strong class="text-danger">200 lei</strong></li>
+                                </ul>
+                            </small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <i class="fa fa-times mr-1"></i> Renunță
+                    </button>
+                    <button type="button" class="btn btn-primary" id="save-masina">
+                        <i class="fa fa-save mr-1"></i> Salvează
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Navigation
+            $('#persoane-nav').click(function(e) {
+                e.preventDefault();
+                $('#masini-section').hide();
+                $('#persoane-section').show();
+                $('#masini-nav').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            $('#masini-nav').click(function(e) {
+                e.preventDefault();
+                $('#persoane-section').hide();
+                $('#masini-section').show();
+                $('#persoane-nav').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Modals
+            $('#adauga-persoana-btn').click(function() {
+                $('#persoana-form')[0].reset();
+                $('#persoana-modal').modal('show');
+                updateSelectedCarsDisplay();
+            });
+            
+            $('#adauga-masina-btn').click(function() {
+                $('#masina-form')[0].reset();
+                $('#masina-modal').modal('show');
+            });
+            
+            // Calculează vârsta din CNP
+            $("#cnp").on('input', function() {
+                let cnp = $(this).val();
+                if (cnp.length === 13 && /^\d+$/.test(cnp)) {
+                    // Extrage anul nașterii
+                    let yearPrefix;
+                    const firstDigit = parseInt(cnp.charAt(0));
+                    
+                    if (firstDigit === 1 || firstDigit === 2) {
+                        yearPrefix = "19";
+                    } else if (firstDigit === 3 || firstDigit === 4) {
+                        yearPrefix = "18";
+                    } else if (firstDigit === 5 || firstDigit === 6) {
+                        yearPrefix = "20";
+                    } else {
+                        return; // CNP invalid
+                    }
+
+                    // Calculează data nașterii
+                    const yearStr = cnp.substring(1, 3);
+                    const monthStr = cnp.substring(3, 5);
+                    const dayStr = cnp.substring(5, 7);
+                    
+                    const birthYear = parseInt(yearPrefix + yearStr);
+                    const birthMonth = parseInt(monthStr);
+                    const birthDay = parseInt(dayStr);
+                    
+                    // Validare dată
+                    if (birthMonth < 1 || birthMonth > 12 || birthDay < 1 || birthDay > 31) {
+                        return; // Dată invalidă
+                    }
+                    
+                    // Calculează vârsta
+                    const today = new Date();
+                    const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    
+                    $("#varsta").val(age);
+                    
+                    // Afișează informațiile din CNP
+                    const gender = firstDigit % 2 === 1 ? "Masculin" : "Feminin";
+                    $("#cnp-gender").text(gender);
+                    
+                    // Formatează data nașterii: DD.MM.YYYY
+                    const formattedDate = 
+                        (birthDay < 10 ? "0" + birthDay : birthDay) + "." +
+                        (birthMonth < 10 ? "0" + birthMonth : birthMonth) + "." +
+                        birthYear;
+                    
+                    $("#cnp-birth-date").text(formattedDate);
+                    
+                    // Extrage județul
+                    const countyCode = parseInt(cnp.substring(7, 9));
+                    const counties = {
+                        1: "Alba", 2: "Arad", 3: "Argeș", 4: "Bacău", 5: "Bihor", 
+                        6: "Bistrița-N.", 7: "Botoșani", 8: "Brașov", 9: "Brăila", 
+                        10: "Buzău", 11: "Caraș-Severin", 12: "Cluj", 13: "Constanța", 
+                        14: "Covasna", 15: "Dâmbovița", 16: "Dolj", 17: "Galați", 
+                        18: "Gorj", 19: "Harghita", 20: "Hunedoara", 21: "Ialomița", 
+                        22: "Iași", 23: "Ilfov", 24: "Maramureș", 25: "Mehedinți", 
+                        26: "Mureș", 27: "Neamț", 28: "Olt", 29: "Prahova", 30: "Satu Mare", 
+                        31: "Sălaj", 32: "Sibiu", 33: "Suceava", 34: "Teleorman", 
+                        35: "Timiș", 36: "Tulcea", 37: "Vaslui", 38: "Vâlcea", 
+                        39: "Vrancea", 40: "București", 41: "București S.1", 42: "București S.2", 
+                        43: "București S.3", 44: "București S.4", 45: "București S.5", 
+                        46: "București S.6", 51: "Călărași", 52: "Giurgiu"
+                    };
+                    
+                    $("#cnp-county").text(counties[countyCode] || "Necunoscut");
+                    
+                    // Afișează cardul cu informații din CNP
+                    $("#cnp-info-card").removeClass("d-none");
+                } else {
+                    $("#varsta").val("");
+                    $("#cnp-info-card").addClass("d-none");
+                }
+            });
+
+            // Adaugă card cu sumarul datelor persoanei
+            $("#persoana-form input").on('input', function() {
+                const nume = $("#nume").val();
+                const prenume = $("#prenume").val();
+                const cnp = $("#cnp").val();
+                const varsta = $("#varsta").val();
+                const masiniSelectate = $("#masini option:selected").length;
+                
+                if(nume || prenume || cnp || varsta || masiniSelectate > 0) {
+                    $("#person-summary-card").removeClass("d-none");
+                    
+                    // Actualizează datele
+                    $("#summary-nume").text(nume + " " + prenume);
+                    $("#summary-age").text(varsta ? varsta + " ani" : "nespecificată");
+                    $("#summary-car-count").text(masiniSelectate);
+                    
+                    // Actualizează indicatorul de completare
+                    let completionFields = 0;
+                    let totalFields = 4; // nume, prenume, cnp, varsta
+                    
+                    if(nume) completionFields++;
+                    if(prenume) completionFields++;
+                    if(cnp && cnp.length === 13) completionFields++;
+                    if(varsta) completionFields++;
+                    
+                    const completionPercent = Math.round((completionFields / totalFields) * 100);
+                    $("#completion-progress").css("width", completionPercent + "%");
+                    $("#completion-text").text(completionPercent + "% completat");
+                    
+                    // Setează clasa de culoare pentru bara de progres
+                    $("#completion-progress")
+                        .removeClass("bg-danger bg-warning bg-info bg-success")
+                        .addClass(completionPercent < 25 ? "bg-danger" : 
+                                 (completionPercent < 50 ? "bg-warning" : 
+                                 (completionPercent < 75 ? "bg-info" : "bg-success")));
+                } else {
+                    $("#person-summary-card").addClass("d-none");
+                }
+            });
+
+            // Calculează taxa în funcție de capacitatea cilindrică
+            function calculateTax(engineCapacity) {
+                let tax = 0;
+                let category = "";
+                let badgeClass = "";
+
+                if (engineCapacity < 1500) {
+                    tax = 50;
+                    category = "Redusă";
+                    badgeClass = "badge-success";
+                } else if (engineCapacity >= 1500 && engineCapacity <= 2000) {
+                    tax = 100;
+                    category = "Medie";
+                    badgeClass = "badge-warning";
+                } else {
+                    tax = 200;
+                    category = "Mare";
+                    badgeClass = "badge-danger";
+                }
+
+                // Actualizează cardul cu informațiile despre taxă
+                $("#tax-amount-badge").text(tax + " lei").removeClass("badge-success badge-warning badge-danger").addClass(badgeClass);
+                $("#tax-category").text(category).removeClass("text-success text-warning text-danger");
+                
+                if (category === "Redusă") {
+                    $("#tax-category").addClass("text-success");
+                } else if (category === "Medie") {
+                    $("#tax-category").addClass("text-warning");
+                } else {
+                    $("#tax-category").addClass("text-danger");
+                }
+                
+                // Calculează data scadentă (31 martie anul curent sau următor)
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear();
+                const dueDate = new Date(currentYear, 2, 31); // 31 martie anul curent
+                
+                // Dacă am trecut deja de data scadentă, arată data pentru anul următor
+                if (currentDate > dueDate) {
+                    dueDate.setFullYear(currentYear + 1);
+                }
+                
+                // Formatează data scadentă ca DD.MM.YYYY
+                const day = dueDate.getDate().toString().padStart(2, '0');
+                const month = (dueDate.getMonth() + 1).toString().padStart(2, '0');
+                const year = dueDate.getFullYear();
+                $("#tax-due-date").text(`${day}.${month}.${year}`);
+                
+                // Calculează și afișează valoarea reducerii
+                const discount = Math.round(tax * 0.1);
+                $("#tax-discount").text(`10% (${discount} lei)`);
+                
+                // Actualizează mesajul informativ
+                const monthsUntilDue = Math.floor((dueDate - currentDate) / (1000 * 60 * 60 * 24 * 30));
+                
+                if (monthsUntilDue <= 1) {
+                    $("#tax-info-message").html(`
+                        <span class="text-danger">Atenție! Mai puțin de o lună până la scadență.</span>
+                    `);
+                } else if (monthsUntilDue <= 3) {
+                    $("#tax-info-message").html(`
+                        Mai sunt ${monthsUntilDue} luni până la data scadentă. Plata anticipată beneficiază de o reducere de 10%.
+                    `);
+                } else {
+                    $("#tax-info-message").html(`
+                        Taxa trebuie plătită anual până la data de 31 martie. Plata anticipată beneficiază de o reducere de 10%.
+                    `);
+                }
+                
+                // Afișează cardul cu informațiile despre taxă
+                $("#tax-info-card").removeClass("d-none");
+
+                return tax;
+            }
+            
+            // Filtering
+            $('#filtru-persoane').on('input', function() {
+                const value = $(this).val().toLowerCase();
+                $("#persoane-table-body tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+            
+            $('#filtru-masini').on('input', function() {
+                const value = $(this).val().toLowerCase();
+                $("#masini-table-body tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+            
+            // Îmbunătățiri pentru selectorul de mașini
+            $('#masini').on('change', function() {
+                updateSelectedCarsDisplay();
+            });
+            
+            function updateSelectedCarsDisplay() {
+                const selectedCars = $('#masini option:selected');
+                const container = $('#selected-cars-info');
+                container.empty();
+                
+                if (selectedCars.length > 0) {
+                    const countBadge = $('<span>').addClass('selected-count badge badge-primary mr-2')
+                        .text(selectedCars.length);
+                    const countText = $('<span>').text(selectedCars.length === 1 ? 'mașină selectată' : 'mașini selectate');
+                    const countContainer = $('<div>').addClass('selected-count-container mb-2 d-flex align-items-center')
+                        .append(countBadge).append(countText);
+                    container.append(countContainer);
+                    
+                    const carsList = $('<div>').addClass('selected-cars-list');
+                    selectedCars.each(function() {
+                        const car = $(this);
+                        const brand = car.data('brand');
+                        const model = car.data('model');
+                        const year = car.data('year');
+                        const capacity = car.data('capacity');
+                        const tax = car.data('tax');
+                        
+                        const taxClass = tax === 50 ? 'tax-low' : (tax === 100 ? 'tax-medium' : 'tax-high');
+                        
+                        const carCard = $('<div>').addClass('car-card mb-2 p-2 border rounded');
+                        const header = $('<div>').addClass('d-flex justify-content-between align-items-center');
+                        const title = $('<div>').addClass('car-title font-weight-bold').text(`${brand} ${model}`);
+                        const yearBadge = $('<span>').addClass('badge badge-primary badge-sm').text(year);
+                        header.append(title).append(yearBadge);
+                        
+                        const details = $('<div>').addClass('car-details d-flex justify-content-between mt-1');
+                        const capacityInfo = $('<small>').addClass('text-muted').html(`<i class="fa fa-tachometer mr-1"></i>${capacity} cc`);
+                        const taxInfo = $('<small>').addClass(`${taxClass}`).html(`<i class="fa fa-money mr-1"></i>${tax} lei`);
+                        details.append(capacityInfo).append(taxInfo);
+                        
+                        carCard.append(header).append(details);
+                        carsList.append(carCard);
+                    });
+                    
+                    container.append(carsList);
+                } else {
+                    container.append($('<div>').addClass('text-muted')
+                        .html('<i class="fa fa-info-circle mr-1"></i>Nu sunt mașini selectate'));
+                }
+            }
+            
+            // Simulate Save
+            $('#save-persoana').click(function() {
+                alert('Persoana a fost salvată cu succes!');
+                $('#persoana-modal').modal('hide');
+            });
+            
+            $('#save-masina').click(function() {
+                alert('Mașina a fost salvată cu succes!');
+                $('#masina-modal').modal('hide');
+            });
+            
+            // Simulate Edit/Delete
+            $('.fa-edit, .fa-trash').click(function() {
+                const action = $(this).hasClass('fa-edit') ? 'modifica' : 'șterge';
+                alert(`Ați ales să ${action}ți acest element.`);
+            });
+
+            // Event handler pentru input-ul de capacitate cilindrică
+            $("#capacitate").on('input', function() {
+                let capacity = parseInt($(this).val());
+                
+                if (!isNaN(capacity)) {
+                    // Calculează taxa și actualizează cardul
+                    let tax = calculateTax(capacity);
+                    $("#taxa").val(tax);
+                } else {
+                    $("#taxa").val("");
+                    $("#tax-info-card").addClass("d-none");
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

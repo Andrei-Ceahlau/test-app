@@ -1,0 +1,400 @@
+/* Stiluri specifice pentru componenta Persons */ 
+
+.search-box {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.person-name {
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.badge-light {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.car-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.car-item {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.car-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.car-brand {
+  display: block;
+  font-weight: 500;
+  color: #2196f3;
+}
+
+.car-details {
+  display: block;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.action-buttons {
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 20px;
+  color: #777;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .col-md-3 {
+    margin-top: 10px;
+  }
+}
+
+/* Stiluri pentru categoriile de impozit */
+.tax-low {
+  color: #fff !important;
+  background-color: #28a745;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  box-shadow: 0 1px 3px rgba(40, 167, 69, 0.2);
+}
+
+.tax-medium {
+  color: #fff !important;
+  background-color: #ff9800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  box-shadow: 0 1px 3px rgba(255, 152, 0, 0.2);
+}
+
+.tax-high {
+  color: #fff !important;
+  background-color: #dc3545;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  box-shadow: 0 1px 3px rgba(220, 53, 69, 0.2);
+}
+
+/* Stiluri pentru lista de mașini */
+.car-item {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* Efecte hover pentru rândurile din tabel */
+.table-hover tbody tr:hover {
+  background-color: rgba(58, 110, 255, 0.04);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Stilizare pentru badge-uri */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.badge-primary {
+  background-color: #3a6eff;
+}
+
+.badge-light {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #e9ecef;
+}
+
+/* Stilizare pentru butoane */
+.btn {
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #3a6eff;
+  border-color: #3a6eff;
+}
+
+.btn-primary:hover {
+  background-color: #2c5ce2;
+  border-color: #2c5ce2;
+  box-shadow: 0 2px 5px rgba(44, 92, 226, 0.2);
+}
+
+.btn-outline-primary {
+  color: #3a6eff;
+  border-color: #3a6eff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #3a6eff;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+}
+
+/* Stilizare pentru carduri */
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card-header {
+  padding: 1rem 1.5rem;
+}
+
+/* Stilizare pentru input-uri */
+.form-control:focus {
+  border-color: #3a6eff;
+  box-shadow: 0 0 0 0.2rem rgba(58, 110, 255, 0.15);
+}
+
+.input-group-text {
+  color: #6c757d;
+}
+
+/* Efecte pentru alerte */
+.alert {
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.alert-info {
+  background-color: rgba(58, 110, 255, 0.1);
+  color: #2c5ce2;
+}
+
+.alert-warning {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: #e08700;
+}
+
+/* Animație subtilă pentru încărcare */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.table-responsive {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Stiluri responsive */
+@media (max-width: 767px) {
+  .container-fluid {
+    padding: 10px;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Stiluri specifice mobile pentru persoane */
+.mobile-person-card {
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 5px solid #3a6eff;
+}
+
+.mobile-person-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.car-list-mobile {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.car-item-mobile {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.car-item-mobile:last-child {
+  border-bottom: none;
+}
+
+.car-section {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.car-section-header {
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #e9ecef;
+}
+
+/* Meta informații pentru mobil */
+.meta-info-mobile {
+  margin-bottom: 10px;
+  padding: 5px 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* Optimizări pentru dispozitive mobile */
+@media (max-width: 767px) {
+  .container-fluid {
+    padding: 10px;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .card-header {
+    padding: 15px;
+  }
+  
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* Asigură că alertele sunt citibile */
+  .alert {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  /* Optimizări pentru casuța de căutare */
+  .input-group {
+    width: 100%;
+  }
+  
+  /* Butoane mai mari pe mobil pentru o interacțiune mai ușoară */
+  .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 14px;
+  }
+  
+  .btn-sm {
+    padding: 0.3rem 0.6rem;
+  }
+  
+  /* Îmbunătățește lizibilitatea textului CNP */
+  .badge-light {
+    letter-spacing: 0.5px;
+  }
+}
+
+/* Îmbunătățiri specifice pentru dispozitive foarte mici */
+@media (max-width: 375px) {
+  .card-header h5 {
+    font-size: 1.1rem;
+  }
+  
+  .badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  
+  .btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 13px;
+  }
+  
+  /* Ascunde unele informații secundare */
+  .car-section-header .badge {
+    display: none;
+  }
+}
+
+/* Optimizări pentru orientarea peisaj pe telefoane */
+@media (max-width: 767px) and (orientation: landscape) {
+  .container-fluid {
+    padding: 5px;
+  }
+  
+  .row {
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  
+  .mobile-person-card {
+    margin-bottom: 10px;
+  }
+  
+  /* Layout special pentru landscape */
+  .mobile-person-card .card-body {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .mobile-person-card .d-flex:first-child {
+    width: 100%;
+  }
+  
+  .mobile-person-card .mb-2 {
+    width: 50%;
+    padding-right: 10px;
+  }
+  
+  .mobile-person-card .car-section {
+    width: 50%;
+  }
+  
+  .mobile-person-card .d-flex:last-child {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Fix pentru scrollarea pe mobil */
+.table-responsive {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Stiluri pentru header-ul fix pe mobil */
+@media (max-width: 767px) {
+  .card-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+} 

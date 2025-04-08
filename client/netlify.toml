@@ -1,0 +1,8 @@
+[build]
+  publish = "dist/test-app"
+
+# Regulă pentru Single Page Application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 

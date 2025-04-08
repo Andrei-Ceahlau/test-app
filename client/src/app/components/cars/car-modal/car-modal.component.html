@@ -1,0 +1,248 @@
+<!-- Modal dialog with improved styling -->
+<div class="modal d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fa fa-car mr-2"></i>
+          {{ title }}
+        </h5>
+        <button type="button" class="close text-white" (click)="onClose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          <!-- Card informativ despre taxă -->
+          <div class="row mb-3" *ngIf="taxInfo.amount > 0">
+            <div class="col-12">
+              <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                  <i class="fa fa-info-circle mr-1"></i> Informații despre taxă
+                </div>
+                <div class="card-body py-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-money mr-2 text-primary"></i>
+                        <div>
+                          <small class="text-muted d-block">Taxă impozit</small>
+                          <span [ngClass]="{
+                            'badge': true,
+                            'badge-success': taxInfo.category === 'low',
+                            'badge-warning': taxInfo.category === 'medium',
+                            'badge-danger': taxInfo.category === 'high'
+                          }">
+                            {{ taxInfo.amount }} lei
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-info-circle mr-2 text-primary"></i>
+                        <div>
+                          <small class="text-muted d-block">Categorie impozitare</small>
+                          <strong [ngClass]="{
+                            'text-success': taxInfo.category === 'low',
+                            'text-warning': taxInfo.category === 'medium',
+                            'text-danger': taxInfo.category === 'high'
+                          }">
+                            {{ taxInfo.category === 'low' ? 'Redusă' : 
+                               taxInfo.category === 'medium' ? 'Medie' : 'Ridicată' }}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Date mașină -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="marca">
+                  <i class="fa fa-tag mr-1"></i>
+                  Marca <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="marca" 
+                    formControlName="marca"
+                    [ngClass]="{ 'is-invalid': submitted && f.marca.errors }"
+                    placeholder="Selectați sau introduceți marca"
+                    list="marciList"
+                  >
+                  <div class="input-group-append">
+                    <button 
+                      class="btn btn-outline-secondary dropdown-toggle" 
+                      type="button" 
+                      data-toggle="dropdown" 
+                      aria-haspopup="true" 
+                      aria-expanded="false">
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <h6 class="dropdown-header">Mărci populare</h6>
+                      <button 
+                        *ngFor="let brand of popularBrands" 
+                        type="button" 
+                        class="dropdown-item"
+                        (click)="carForm.get('marca')?.setValue(brand)">
+                        {{ brand }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <datalist id="marciList">
+                  <option *ngFor="let brand of popularBrands" [value]="brand"></option>
+                </datalist>
+                <div *ngIf="submitted && f.marca.errors" class="invalid-feedback">
+                  <div *ngIf="f.marca.errors.required">Marca este obligatorie</div>
+                  <div *ngIf="f.marca.errors.maxlength">Marca nu poate depăși 255 caractere</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="model">
+                  <i class="fa fa-car mr-1"></i>
+                  Model <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="model" 
+                  formControlName="model" 
+                  [ngClass]="{ 'is-invalid': submitted && f.model.errors }"
+                  placeholder="Introduceți modelul"
+                >
+                <!-- Sugestii de modele dacă marca este cunoscută -->
+                <div *ngIf="hasModelSuggestions()" class="model-suggestions mt-1">
+                  <small class="text-muted">Modele sugerate:</small>
+                  <div class="btn-group btn-group-sm mt-1">
+                    <button 
+                      *ngFor="let model of getModelSuggestions()" 
+                      type="button" 
+                      class="btn btn-outline-secondary mr-1 mb-1"
+                      (click)="selectModel(model)">
+                      {{ model }}
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.model.errors" class="invalid-feedback">
+                  <div *ngIf="f.model.errors.required">Modelul este obligatoriu</div>
+                  <div *ngIf="f.model.errors.maxlength">Modelul nu poate depăși 255 caractere</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="an_fabricatie">
+                  <i class="fa fa-calendar mr-1"></i>
+                  An Fabricație <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="an_fabricatie" 
+                    formControlName="an_fabricatie" 
+                    [ngClass]="{ 'is-invalid': submitted && f.an_fabricatie.errors }"
+                  >
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i class="fa fa-calendar-o"></i>
+                    </span>
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.an_fabricatie.errors" class="invalid-feedback">
+                  <div *ngIf="f.an_fabricatie.errors.required">Anul fabricației este obligatoriu</div>
+                  <div *ngIf="f.an_fabricatie.errors.min">Anul fabricației trebuie să fie după 1900</div>
+                  <div *ngIf="f.an_fabricatie.errors.max">Anul fabricației nu poate depăși anul curent</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="capacitate_cilindrica">
+                  <i class="fa fa-tachometer mr-1"></i>
+                  Capacitate Cilindrică <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="capacitate_cilindrica" 
+                    formControlName="capacitate_cilindrica"
+                    [ngClass]="{ 'is-invalid': submitted && f.capacitate_cilindrica.errors }"
+                  >
+                  <div class="input-group-append">
+                    <span class="input-group-text">cc</span>
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.capacitate_cilindrica.errors" class="invalid-feedback">
+                  <div *ngIf="f.capacitate_cilindrica.errors.required">Capacitatea cilindrică este obligatorie</div>
+                  <div *ngIf="f.capacitate_cilindrica.errors.min">Capacitatea cilindrică trebuie să fie pozitivă</div>
+                  <div *ngIf="f.capacitate_cilindrica.errors.max">Capacitatea cilindrică nu poate depăși 9999</div>
+                </div>
+                <small class="text-muted">
+                  <i class="fa fa-info-circle mr-1"></i>
+                  Capacitatea cilindrică determină taxa de impozit
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="taxa_impozit">
+              <i class="fa fa-money mr-1"></i>
+              Taxă Impozit
+            </label>
+            <div class="input-group">
+              <input 
+                type="number" 
+                class="form-control" 
+                id="taxa_impozit" 
+                formControlName="taxa_impozit"
+                readonly
+                [placeholder]="getTaxPlaceholder()"
+              >
+              <div class="input-group-append">
+                <span class="input-group-text">lei</span>
+              </div>
+            </div>
+            <small class="text-muted">
+              <i class="fa fa-calculator mr-1"></i>
+              Taxa se calculează automat în funcție de capacitatea cilindrică:
+              <ul class="mt-1 mb-0">
+                <li>&lt; 1500 cc: <strong class="text-success">50 lei</strong></li>
+                <li>1500-2000 cc: <strong class="text-warning">100 lei</strong></li>
+                <li>&gt; 2000 cc: <strong class="text-danger">200 lei</strong></li>
+              </ul>
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-outline-secondary" (click)="onClose()">
+            <i class="fa fa-times mr-1"></i>
+            Renunță
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-save mr-1"></i>
+            Salvează
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show"></div> 

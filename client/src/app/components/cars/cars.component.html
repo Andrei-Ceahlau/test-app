@@ -1,0 +1,156 @@
+<div class="container-fluid px-4 py-3">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient d-flex justify-content-between align-items-center" style="background: linear-gradient(45deg, #3a6eff, #5c8dff); color: white;">
+          <div class="d-flex align-items-center">
+            <i class="fa fa-car mr-2" style="font-size: 1.4rem;"></i>
+            <h5 class="mb-0 font-weight-bold">Administrare Mașini</h5>
+          </div>
+          <button class="btn btn-light" (click)="openAddModal()">
+            <i class="fa fa-plus mr-1"></i> Adaugă Mașină
+          </button>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="row mb-4">
+            <div class="col-md-8 col-sm-12 mx-auto">
+              <div class="input-group shadow-sm">
+                <div class="input-group-prepend d-none d-sm-flex">
+                  <span class="input-group-text bg-white border-right-0">
+                    <i class="fa fa-search text-primary"></i>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control border-left-0"
+                  placeholder="Caută mașini..."
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="onSearchChange()"
+                />
+                <div class="input-group-append">
+                  <button 
+                    class="btn btn-primary" 
+                    type="button" 
+                    (click)="filter()"
+                    title="Caută">
+                    <i class="fa fa-search d-sm-none"></i>
+                    <span class="d-none d-sm-inline">Caută</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Rezultate căutare -->
+          <div *ngIf="searchTerm" class="alert alert-info mb-3 d-flex align-items-center">
+            <i class="fa fa-info-circle mr-2" style="font-size: 1.2rem;"></i>
+            <div class="w-100">
+              <div class="d-block d-sm-inline">
+                <strong>Termen căutat:</strong> "{{ searchTerm.length > 10 ? (searchTerm | slice:0:10) + '...' : searchTerm }}"
+              </div>
+              <div class="d-block d-sm-inline ml-sm-2">
+                <strong>Rezultate:</strong> {{ filteredCars.length }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Niciun rezultat -->
+          <div *ngIf="filteredCars.length === 0 && searchTerm" class="alert alert-warning d-flex align-items-center">
+            <i class="fa fa-exclamation-triangle mr-2" style="font-size: 1.2rem;"></i>
+            <div>Nu s-au găsit mașini care să corespundă criteriilor de căutare.</div>
+          </div>
+          
+          <!-- Listă goală -->
+          <div *ngIf="filteredCars.length === 0 && !searchTerm" class="alert alert-info d-flex align-items-center">
+            <i class="fa fa-info-circle mr-2" style="font-size: 1.2rem;"></i>
+            <div>Nu există mașini înregistrate. Adăugați o mașină folosind butonul de mai sus.</div>
+          </div>
+          
+          <!-- Tabel rezultate optimizat pentru mobil -->
+          <div class="table-responsive" *ngIf="filteredCars.length > 0">
+            <!-- Tabel pentru desktop -->
+            <table class="table table-hover d-none d-md-table">
+              <thead class="thead-light">
+                <tr>
+                  <th>Marcă</th>
+                  <th>Model</th>
+                  <th>An Fabricație</th>
+                  <th>Capacitate Cilindrică</th>
+                  <th>Impozit</th>
+                  <th class="text-center">Acțiuni</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let car of filteredCars" class="align-middle">
+                  <td class="font-weight-bold">{{ car.marca }}</td>
+                  <td>{{ car.model }}</td>
+                  <td>
+                    <span class="badge badge-primary">{{ car.an_fabricatie }}</span>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <i class="fa fa-tachometer mr-1 text-muted"></i>
+                      {{ car.capacitate_cilindrica }} cm³
+                    </div>
+                  </td>
+                  <td>
+                    <span [ngClass]="getTaxClass(car.taxa_impozit)" class="badge py-2 px-3" style="font-size: 0.85rem;">
+                      <i class="fa fa-money mr-1"></i> {{ car.taxa_impozit }} RON
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(car)" title="Editează">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id)" title="Șterge">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Carduri mobile pentru telefon -->
+            <div class="d-md-none">
+              <div *ngFor="let car of filteredCars" class="card mb-3 mobile-car-card">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0 font-weight-bold">{{ car.marca }} {{ car.model }}</h5>
+                    <span class="badge badge-primary">{{ car.an_fabricatie }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <div>
+                      <i class="fa fa-tachometer mr-1 text-muted"></i>
+                      <span>{{ car.capacitate_cilindrica }} cm³</span>
+                    </div>
+                    <span [ngClass]="getTaxClass(car.taxa_impozit)" class="badge py-2 px-3">
+                      <i class="fa fa-money mr-1"></i> {{ car.taxa_impozit }} RON
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-end mt-2">
+                    <button class="btn btn-sm btn-outline-primary mr-2" (click)="openEditModal(car)">
+                      <i class="fa fa-edit mr-1"></i> Editează
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id)">
+                      <i class="fa fa-trash mr-1"></i> Șterge
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-car-modal
+    *ngIf="showModal"
+    [car]="selectedCar"
+    (save)="saveCar($event)"
+    (close)="closeModal()"
+  ></app-car-modal>
+</div> 

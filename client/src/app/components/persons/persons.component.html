@@ -1,0 +1,206 @@
+<div class="container-fluid px-4 py-3">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-gradient d-flex justify-content-between align-items-center" style="background: linear-gradient(45deg, #3a6eff, #5c8dff); color: white;">
+          <div class="d-flex align-items-center">
+            <i class="fa fa-users mr-2" style="font-size: 1.4rem;"></i>
+            <h5 class="mb-0 font-weight-bold">Administrare Persoane</h5>
+          </div>
+          <button class="btn btn-light" (click)="openAddModal()">
+            <i class="fa fa-plus mr-1"></i> Adaugă Persoană
+          </button>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="row mb-4">
+            <div class="col-md-8 col-sm-12 mx-auto">
+              <div class="input-group shadow-sm">
+                <div class="input-group-prepend d-none d-sm-flex">
+                  <span class="input-group-text bg-white border-right-0">
+                    <i class="fa fa-search text-primary"></i>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control border-left-0"
+                  placeholder="Caută persoane..."
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="onSearchChange()"
+                />
+                <div class="input-group-append">
+                  <button 
+                    class="btn btn-primary" 
+                    type="button" 
+                    (click)="filter()"
+                    title="Caută">
+                    <i class="fa fa-search d-sm-none"></i>
+                    <span class="d-none d-sm-inline">Caută</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Rezultate căutare -->
+          <div *ngIf="searchTerm" class="alert alert-info mb-3 d-flex align-items-center">
+            <i class="fa fa-info-circle mr-2" style="font-size: 1.2rem;"></i>
+            <div class="w-100">
+              <div class="d-block d-sm-inline">
+                <strong>Termen căutat:</strong> "{{ searchTerm.length > 10 ? (searchTerm | slice:0:10) + '...' : searchTerm }}"
+              </div>
+              <div class="d-block d-sm-inline ml-sm-2">
+                <strong>Rezultate:</strong> {{ filteredPersons.length }}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Niciun rezultat -->
+          <div *ngIf="filteredPersons.length === 0 && searchTerm" class="alert alert-warning d-flex align-items-center">
+            <i class="fa fa-exclamation-triangle mr-2" style="font-size: 1.2rem;"></i>
+            <div>Nu s-au găsit persoane care să corespundă criteriilor de căutare.</div>
+          </div>
+          
+          <!-- Listă goală -->
+          <div *ngIf="filteredPersons.length === 0 && !searchTerm" class="alert alert-info d-flex align-items-center">
+            <i class="fa fa-info-circle mr-2" style="font-size: 1.2rem;"></i>
+            <div>Nu există persoane înregistrate. Adăugați o persoană folosind butonul de mai sus.</div>
+          </div>
+          
+          <!-- Tabel rezultate -->
+          <div class="table-responsive" *ngIf="filteredPersons.length > 0">
+            <!-- Tabel pentru desktop -->
+            <table class="table table-hover d-none d-md-table">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Nume / Prenume</th>
+                  <th>CNP</th>
+                  <th>Vârstă</th>
+                  <th>Mașini</th>
+                  <th class="text-center">Acțiuni</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let person of filteredPersons; let i = index" class="align-middle">
+                  <td>{{ i + 1 }}</td>
+                  <td class="font-weight-bold">{{ person.nume }} {{ person.prenume }}</td>
+                  <td>
+                    <span class="badge badge-light p-2">{{ person.cnp }}</span>
+                  </td>
+                  <td>
+                    <span class="badge badge-primary p-2">{{ person.varsta }} ani</span>
+                  </td>
+                  <td>
+                    <div *ngIf="person.cars && person.cars.length > 0">
+                      <div *ngFor="let car of person.cars; let last = last" class="mb-1">
+                        <span class="car-item">
+                          <i class="fa fa-car mr-1 text-muted"></i>
+                          {{ car.marca }} {{ car.model }} 
+                          <small class="text-muted">
+                            ({{ car.an_fabricatie }} • {{ car.capacitate_cilindrica }} cc • 
+                            <span [ngClass]="{'tax-low': car.taxa_impozit <= 50, 
+                                             'tax-medium': car.taxa_impozit > 50 && car.taxa_impozit <= 100, 
+                                             'tax-high': car.taxa_impozit > 100}" 
+                                 class="tax-badge">
+                              {{ car.taxa_impozit }} lei
+                            </span>)
+                          </small>
+                        </span>
+                      </div>
+                    </div>
+                    <span *ngIf="!person.cars || person.cars.length === 0" class="text-muted">
+                      <i class="fa fa-info-circle mr-1"></i> Fără mașini
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(person)" title="Editează">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="deletePerson(person.id)" title="Șterge">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Carduri mobile pentru telefon -->
+            <div class="d-md-none">
+              <div *ngFor="let person of filteredPersons; let i = index" class="card mb-3 mobile-person-card">
+                <div class="card-body p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0 font-weight-bold">{{ person.nume }} {{ person.prenume }}</h5>
+                    <span class="badge badge-primary p-2">{{ person.varsta }} ani</span>
+                  </div>
+                  
+                  <div class="mb-2">
+                    <small class="text-muted">CNP:</small>
+                    <span class="badge badge-light p-2 ml-1" style="font-size: 0.8rem; letter-spacing: 0.5px;">{{ person.cnp }}</span>
+                  </div>
+                  
+                  <div class="car-section mb-2">
+                    <div class="car-section-header d-flex justify-content-between align-items-center mb-1">
+                      <small class="text-muted font-weight-bold">
+                        <i class="fa fa-car mr-1"></i> 
+                        Mașini ({{ person.cars?.length || 0 }})
+                      </small>
+                      <div *ngIf="person.cars && person.cars.length > 0" 
+                           class="badge badge-light bg-transparent p-0 border-0">
+                        <small class="text-primary">Apasă pentru detalii</small>
+                      </div>
+                    </div>
+                    
+                    <div *ngIf="person.cars && person.cars.length > 0" class="car-list-mobile">
+                      <div *ngFor="let car of person.cars.slice(0, 2); let last = last" class="car-item-mobile p-2 mb-1">
+                        <div class="d-flex justify-content-between mb-1">
+                          <span class="font-weight-bold">{{ car.marca }} {{ car.model }}</span>
+                          <span class="badge badge-info">{{ car.an_fabricatie }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <small>{{ car.capacitate_cilindrica }} cc</small>
+                          <span [ngClass]="{'tax-low': car.taxa_impozit <= 50, 
+                                        'tax-medium': car.taxa_impozit > 50 && car.taxa_impozit <= 100, 
+                                        'tax-high': car.taxa_impozit > 100}" 
+                             class="tax-badge">
+                            {{ car.taxa_impozit }} lei
+                          </span>
+                        </div>
+                      </div>
+                      <div *ngIf="person.cars.length > 2" class="text-center py-1">
+                        <small class="text-muted">+{{ person.cars.length - 2 }} alte mașini</small>
+                      </div>
+                    </div>
+                    
+                    <div *ngIf="!person.cars || person.cars.length === 0" class="py-2 text-center">
+                      <small class="text-muted">Fără mașini înregistrate</small>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-sm btn-outline-primary mr-2" (click)="openEditModal(person)">
+                      <i class="fa fa-edit mr-1"></i> Editează
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="deletePerson(person.id)">
+                      <i class="fa fa-trash mr-1"></i> Șterge
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-person-modal
+    *ngIf="showModal"
+    [person]="selectedPerson"
+    [cars]="cars"
+    (close)="closeModal()"
+    (save)="savePerson($event)">
+  </app-person-modal>
+</div>

@@ -1,0 +1,13 @@
+RewriteEngine On
+# Dacă o cerere este făcută la un fișier existent, furnizați fișierul
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Setează MIME type corect pentru fișierele CSS
+<FilesMatch "\.css$">
+  ForceType text/css
+</FilesMatch>
+
+# În caz contrar, redirecționați către index.html
+RewriteRule ^ index.html [L] 

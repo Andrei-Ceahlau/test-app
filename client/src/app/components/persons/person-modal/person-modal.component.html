@@ -1,0 +1,202 @@
+<div class="modal d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">
+          <i class="fa fa-user mr-2"></i>
+          {{ person?.id ? 'Editează Persoana' : 'Adaugă Persoană Nouă' }}
+        </h5>
+        <button type="button" class="close text-white" (click)="onClose()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          <!-- Carduri de informații din CNP -->
+          <div class="row mb-3" *ngIf="cnpInfo.birthDate">
+            <div class="col-12">
+              <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                  <i class="fa fa-info-circle mr-1"></i> Informații extrase din CNP
+                </div>
+                <div class="card-body py-2">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-calendar mr-2 text-primary"></i>
+                        <div>
+                          <small class="text-muted d-block">Data nașterii</small>
+                          <strong>{{ cnpInfo.birthDate }}</strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-venus-mars mr-2 text-primary"></i>
+                        <div>
+                          <small class="text-muted d-block">Gen</small>
+                          <strong>{{ cnpInfo.gender }}</strong>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-center">
+                        <i class="fa fa-map-marker mr-2 text-primary"></i>
+                        <div>
+                          <small class="text-muted d-block">Județ</small>
+                          <strong>{{ cnpInfo.county || 'Necunoscut' }}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Numele și prenumele -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="nume">
+                  <i class="fa fa-user-circle mr-1"></i>
+                  Nume <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="nume"
+                  formControlName="nume"
+                  class="form-control"
+                  [ngClass]="{'is-invalid': submitted && f.nume.errors}"
+                  placeholder="Introduceți numele"
+                />
+                <div *ngIf="submitted && f.nume.errors" class="invalid-feedback">
+                  <div *ngIf="f.nume.errors.required">Numele este obligatoriu</div>
+                  <div *ngIf="f.nume.errors.maxlength">Numele nu poate depăși 255 caractere</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="prenume">
+                  <i class="fa fa-user mr-1"></i>
+                  Prenume <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="prenume"
+                  formControlName="prenume"
+                  class="form-control"
+                  [ngClass]="{'is-invalid': submitted && f.prenume.errors}"
+                  placeholder="Introduceți prenumele"
+                />
+                <div *ngIf="submitted && f.prenume.errors" class="invalid-feedback">
+                  <div *ngIf="f.prenume.errors.required">Prenumele este obligatoriu</div>
+                  <div *ngIf="f.prenume.errors.maxlength">Prenumele nu poate depăși 255 caractere</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CNP și vârstă -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cnp">
+                  <i class="fa fa-id-card mr-1"></i>
+                  CNP <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="cnp"
+                  formControlName="cnp"
+                  class="form-control"
+                  [ngClass]="{'is-invalid': submitted && f.cnp.errors}"
+                  (blur)="calculateAge()"
+                  placeholder="1234567890123"
+                />
+                <div *ngIf="submitted && f.cnp.errors" class="invalid-feedback">
+                  <div *ngIf="f.cnp.errors.required">CNP-ul este obligatoriu</div>
+                  <div *ngIf="f.cnp.errors.minlength || f.cnp.errors.maxlength">CNP-ul trebuie să aibă 13 cifre</div>
+                  <div *ngIf="f.cnp.errors.pattern">CNP-ul trebuie să conțină doar cifre</div>
+                  <div *ngIf="f.cnp.errors.invalidFirstDigit">Prima cifră a CNP-ului este invalidă</div>
+                  <div *ngIf="f.cnp.errors.invalidMonth">Luna din CNP este invalidă</div>
+                  <div *ngIf="f.cnp.errors.invalidDay">Ziua din CNP este invalidă</div>
+                  <div *ngIf="f.cnp.errors.invalidCounty">Codul de județ din CNP este invalid</div>
+                </div>
+                <small class="text-muted">
+                  <i class="fa fa-info-circle mr-1"></i>
+                  Codul Numeric Personal (13 cifre) - Va completa automat vârsta și alte informații
+                </small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="varsta">
+                  <i class="fa fa-birthday-cake mr-1"></i>
+                  Vârsta <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    id="varsta"
+                    formControlName="varsta"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': submitted && f.varsta.errors}"
+                    readonly
+                  />
+                  <div class="input-group-append">
+                    <span class="input-group-text">ani</span>
+                  </div>
+                </div>
+                <div *ngIf="submitted && f.varsta.errors" class="invalid-feedback">
+                  <div *ngIf="f.varsta.errors.required">Vârsta este obligatorie</div>
+                </div>
+                <small class="text-muted">
+                  <i class="fa fa-calculator mr-1"></i>
+                  Se calculează automat din CNP
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mașini asociate -->
+          <div class="form-group">
+            <label for="cars">
+              <i class="fa fa-car mr-1"></i> Mașini asociate
+            </label>
+            <select 
+              multiple 
+              class="form-control custom-select" 
+              id="cars" 
+              formControlName="cars"
+              style="min-height: 120px; padding: 10px;"
+            >
+              <option *ngFor="let car of cars" [value]="car.id">
+                {{ car.marca }} {{ car.model }} ({{ car.an_fabricatie }}) - {{ car.capacitate_cilindrica }} cc - {{ car.taxa_impozit }} lei
+              </option>
+            </select>
+            <small class="form-text text-muted mt-1">
+              <i class="fa fa-info-circle mr-1"></i> 
+              Alegeți mașinile deținute de această persoană (țineți CTRL pentru selecție multiplă)
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-outline-secondary" (click)="onClose()">
+            <i class="fa fa-times mr-1"></i> Renunță
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="personForm.invalid"
+            (click)="submitForm()"
+          >
+            <i class="fa fa-save mr-1"></i> Salvează
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show"></div> 

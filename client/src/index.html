@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <title>Test App | Persoane și Mașini</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Încărcăm toate stilurile de la CDN-uri pentru a evita problema MIME type -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Import direct al stilurilor pentru ng-select (versiunea corectă) -->
+  <link rel="stylesheet" href="https://unpkg.com/@ng-select/ng-select@9.1.0/themes/default.theme.min.css">
+  <!-- Stiluri inline pentru componente -->
+  <style>
+    /* Stiluri pentru ng-select */
+    .ng-select .ng-dropdown-panel {
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .car-select {
+      margin-bottom: 15px;
+      width: 100%;
+    }
+
+    .tax-low {
+      color: #28a745;
+      background-color: rgba(40, 167, 69, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .tax-medium {
+      color: #fd7e14;
+      background-color: rgba(253, 126, 20, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .tax-high {
+      color: #dc3545;
+      background-color: rgba(220, 53, 69, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .car-badge {
+      display: flex;
+      align-items: center;
+    }
+
+    .cars-selected {
+      display: flex;
+      align-items: center;
+    }
+
+    .selected-count {
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <app-root></app-root>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html> 

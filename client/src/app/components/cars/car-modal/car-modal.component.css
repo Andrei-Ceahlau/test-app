@@ -1,0 +1,129 @@
+/* Stiluri specifice pentru componenta CarModal */
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Stiluri pentru formularul de mașini */
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Stiluri pentru dropdown și sugestii */
+.dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdown-header {
+  font-weight: 600;
+  color: #6c757d;
+  background-color: #f8f9fa;
+}
+
+.dropdown-item {
+  padding: 0.4rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background-color: #e9ecef;
+}
+
+/* Stiluri pentru sugestii de modele */
+.model-suggestions {
+  margin-top: 0.5rem;
+}
+
+.model-suggestions button {
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
+  border-radius: 16px;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.model-suggestions button:hover {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Stiluri pentru carduri informative */
+.card-info {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-info:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Stiluri pentru input-group */
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+}
+
+/* Stiluri pentru badge */
+.badge {
+  padding: 0.4rem 0.6rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.badge-success {
+  background-color: #28a745;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+}
+
+/* Stiluri pentru lista de mărci */
+datalist {
+  display: none;
+}
+
+/* Stiluri pentru focus */
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Stiluri pentru tabele de informații */
+ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+ul li {
+  margin-bottom: 0.2rem;
+}
+
+/* Sugestii de modele */
+.btn-outline-secondary {
+  border-color: #ced4da;
+}
+
+.btn-outline-secondary:hover {
+  border-color: #6c757d;
+}
+
+/* Modal footer */
+.modal-footer {
+  border-top: 1px solid #eee;
+} 
